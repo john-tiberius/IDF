@@ -45,6 +45,8 @@ void SerialDevice::open() {
 }
 
 int SerialDevice::read(unsigned char *buffer, size_t length) {
+    std::stringstream msg;
+
     if (!mOpen) {
         open();
     }
@@ -53,7 +55,8 @@ int SerialDevice::read(unsigned char *buffer, size_t length) {
 
     if (bytesRead < 0) {
         close();
-        throw IOException("Error while reading " + name + ": " + strerror(errno));
+	msg << "Error while reading " <<  name << ": " << strerror(errno) << " read " << bytesRead << " of length " << length;
+        throw IOException(msg.str());
     }
 
     return bytesRead;
